@@ -6,6 +6,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 const SensorDashboard = () => {
   const [temperatureData, setTemperatureData] = useState([]);
   const [vibrationData, setVibrationData] = useState([]);
+  const [temperature, setTemperature] = useState<(number | null)[]>(Array(2).fill(null));
+  const [vibration, setVibration] = useState<(number | null)[]>(Array(4).fill(null));
   const backendUrl = "https://showa-takahashigarilei.onrender.com";
   const deviceID = "takahashigarilei";
 
@@ -19,6 +21,8 @@ const SensorDashboard = () => {
           const timestamp = new Date().toLocaleTimeString();
           setTemperatureData(prevData => [...prevData.slice(-11), { time: timestamp, temp1: latestData.tempC[0], temp2: latestData.tempC[1] }]);
           setVibrationData(prevData => [...prevData.slice(-11), { time: timestamp, vib1: latestData.vReal[0], vib2: latestData.vReal[1], vib3: latestData.vReal[2], vib4: latestData.vReal[3] }]);
+          setTemperature([latestData.tempC[0], latestData.tempC[1]]);
+          setVibration([latestData.vReal[0], latestData.vReal[1], latestData.vReal[2], latestData.vReal[3]]);
         }
       } catch (error) {
         console.error("データ取得に失敗しました:", error);
@@ -39,7 +43,21 @@ const SensorDashboard = () => {
 
       <div className="flex flex-col items-center justify-center p-4">
         <div className="px-6 py-6 bg-[#F3F4F6] rounded-lg mt-8 gap-6 w-full">
-          
+          {/* 温度センサ データ表示 */}
+          <div className="bg-white rounded-md shadow p-4">
+            <h2 className="text-lg font-semibold text-[#868DAA] text-center mb-4">温度センサ</h2>
+            <div className="flex flex-row justify-center gap-4">
+              {temperature.map((temp, index) => (
+                <div key={index} className="text-center w-1/4 border border-gray-200 rounded-md p-4">
+                  <p className="text-[#868DAA]">温度センサ {index + 1}</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {temp !== null ? `${temp} °C` : "データなし"}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* 温度センサ グラフ */}
           <div className="bg-white rounded-md shadow p-4">
             <h2 className="text-lg font-semibold text-[#868DAA] text-center mb-4">温度センサ (リアルタイム)</h2>
@@ -55,25 +73,11 @@ const SensorDashboard = () => {
               </LineChart>
             </ResponsiveContainer>
           </div>
-
-          {/* 振動センサ グラフ */}
-          <div className="bg-white rounded-md shadow p-4">
-            <h2 className="text-lg font-semibold text-[#868DAA] text-center mb-4">振動センサ (リアルタイム)</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={vibrationData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="time" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="vib1" stroke="#FFA500" name="振動センサ1" />
-                <Line type="monotone" dataKey="vib2" stroke="#008000" name="振動センサ2" />
-                <Line type="monotone" dataKey="vib3" stroke="#800080" name="振動センサ3" />
-                <Line type="monotone" dataKey="vib4" stroke="#FF00FF" name="振動センサ4" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
         </div>
+
+        <p className="text-[#8091A3] pt-10 text-sm">
+          © 2006-2025 株式会社 ショウワ 無断転載禁止。
+        </p>
       </div>
     </div>
   );
