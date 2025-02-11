@@ -73,6 +73,21 @@ const SensorDashboard = () => {
               </LineChart>
             </ResponsiveContainer>
           </div>
+
+          {/* 振動センサ データ表示 */}
+          <div className="bg-white rounded-md shadow p-4">
+            <h2 className="text-lg font-semibold text-[#868DAA] text-center mb-4">振動センサ</h2>
+            <div className="flex flex-row justify-center gap-4">
+              {vibration.map((vib, index) => (
+                <div key={index} className="text-center w-1/4 border border-gray-200 rounded-md p-4">
+                  <p className="text-[#868DAA]">振動センサ {index + 1}</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {vib !== null ? `${vib} Hz` : "データなし"}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <p className="text-[#8091A3] pt-10 text-sm">
