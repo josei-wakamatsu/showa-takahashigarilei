@@ -58,6 +58,21 @@ const SensorDashboard = () => {
             </div>
           </div>
 
+          {/* 振動センサ データ表示 */}
+          <div className="bg-white rounded-md shadow p-4">
+            <h2 className="text-lg font-semibold text-[#868DAA] text-center mb-4">振動センサ</h2>
+            <div className="flex flex-row justify-center gap-4">
+              {vibration.map((vib, index) => (
+                <div key={index} className="text-center w-1/4 border border-gray-200 rounded-md p-4">
+                  <p className="text-[#868DAA]">振動センサ {index + 1}</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {vib !== null ? `${vib} Hz` : "データなし"}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* 温度センサ グラフ */}
           <div className="bg-white rounded-md shadow p-4">
             <h2 className="text-lg font-semibold text-[#868DAA] text-center mb-4">温度センサ (リアルタイム)</h2>
@@ -74,25 +89,25 @@ const SensorDashboard = () => {
             </ResponsiveContainer>
           </div>
 
-          {/* 振動センサ データ表示 */}
+          {/* 振動センサ グラフ */}
           <div className="bg-white rounded-md shadow p-4">
-            <h2 className="text-lg font-semibold text-[#868DAA] text-center mb-4">振動センサ</h2>
-            <div className="flex flex-row justify-center gap-4">
-              {vibration.map((vib, index) => (
-                <div key={index} className="text-center w-1/4 border border-gray-200 rounded-md p-4">
-                  <p className="text-[#868DAA]">振動センサ {index + 1}</p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {vib !== null ? `${vib} Hz` : "データなし"}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <h2 className="text-lg font-semibold text-[#868DAA] text-center mb-4">振動センサ (リアルタイム)</h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={vibrationData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="time" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="vib1" stroke="#FFA500" name="振動センサ1" />
+                <Line type="monotone" dataKey="vib2" stroke="#008000" name="振動センサ2" />
+                <Line type="monotone" dataKey="vib3" stroke="#800080" name="振動センサ3" />
+                <Line type="monotone" dataKey="vib4" stroke="#FF00FF" name="振動センサ4" />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
-
-        <p className="text-[#8091A3] pt-10 text-sm">
-          © 2006-2025 株式会社 ショウワ 無断転載禁止。
-        </p>
+        <p className="text-[#8091A3] pt-10 text-sm">© 2006-2025 株式会社 ショウワ 無断転載禁止。</p>
       </div>
     </div>
   );
